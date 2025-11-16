@@ -45,7 +45,7 @@ jobs:
             platforms: linux/amd64,linux/arm64
             mcVersion: latest
           - variant: java25-lycee
-            baseImage: ghcr.io/democraftmc/yolks:java_25f
+            baseImage: ghcr.io/funasitien/java-lycee:25
             platforms: linux/amd64,linux/arm64
             mcVersion: latest
           - variant: java25-graalvm
