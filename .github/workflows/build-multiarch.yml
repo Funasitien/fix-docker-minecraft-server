@@ -23,6 +23,7 @@ jobs:
         variant:
           - java25
           - java25-graalvm
+          - java25-lycee
           - java21
           - java21-alpine
           - java21-graalvm
@@ -36,10 +37,15 @@ jobs:
           - java8-graalvm-ce
           - java8-openj9
           - java8-jdk
+
         include:
         # JAVA 25
           - variant: java25
             baseImage: eclipse-temurin:25-jre
+            platforms: linux/amd64,linux/arm64
+            mcVersion: latest
+          - variant: java25-lycee
+            baseImage: ghcr.io/democraftmc/yolks:java_25f
             platforms: linux/amd64,linux/arm64
             mcVersion: latest
           - variant: java25-graalvm
@@ -185,20 +191,12 @@ jobs:
         run: |
           tests/test.sh
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v3.6.0
-        if: env.HAS_IMAGE_REPO_ACCESS
-        with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Login to GHCR
-        uses: docker/login-action@v3.6.0
-        if: env.HAS_IMAGE_REPO_ACCESS
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ github.token }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
         uses: docker/build-push-action@v6.18.0
